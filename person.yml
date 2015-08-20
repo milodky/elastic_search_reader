@@ -1,0 +1,48 @@
+schema:
+  first_names:  Array[String]
+  last_name:    String
+  middle_names: Array[String]
+
+  locations:    Array[Hash]
+  phones:       Array[Hash]
+
+
+elastic_search:
+  searchable_fields:
+    first_name: first_name
+    alias:      alias
+    last_name:  last_name
+    location:
+      nested: true
+      path: locations
+      fields:
+        city:  city
+        state: state
+    phone:
+      nested: false
+      path:   phones
+      field:  phone
+
+  sharding:
+     type: pln
+     index:
+       key:   last_name
+       range: 0...1
+       key_for_index_sharding: "'a'..'z'"
+     routing:
+       key:   last_name
+       range: 0...3
+  routing: 3
+
+  mapping:
+     _routing:
+       required: true
+       path:     shard_key
+     properties:
+       first_name:
+         type: string
+         index: not_analyzed
+       last_name:
+          type: string
+          index: not_analyzed
+  url: http://127.0.0.1:9200
