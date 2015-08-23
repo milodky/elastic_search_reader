@@ -12,6 +12,7 @@ elastic_search:
     first_name: first_name
     alias:      alias
     last_name:  last_name
+    main_last_name: main_last_name
     location:
       nested: true
       path: locations
@@ -22,6 +23,7 @@ elastic_search:
       nested: false
       path:   phones
       field:  phone
+    
 
   sharding:
      type: pln
